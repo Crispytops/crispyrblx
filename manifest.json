@@ -1,0 +1,52 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "icons/icon128.png",
+         "16": "icons/icon16.png",
+         "32": "icons/icon32.png",
+         "48": "icons/icon48.png"
+      },
+      "default_popup": "betterblox-popup/default/popup.html",
+      "default_title": "BetterBLOX - Last Online"
+   },
+   "author": "crispy",
+   "background": {
+      "service_worker": "background.js",
+      "type": "module"
+   },
+   "content_scripts": [ {
+      "js": [ "vendors.js", "bundle.js" ],
+      "matches": [ "*://www.roblox.com/*", "*://roblox.com/*" ],
+      "run_at": "document_end"
+   } ],
+   "declarative_net_request": {
+      "rule_resources": [ {
+         "enabled": true,
+         "id": "ruleset_1",
+         "path": "net_requests/rules.json"
+      } ]
+   },
+   "description": "BetterBLOX is a Better Roblox Extension that shows when users were last online. Adds free server region selector and player popups.",
+   "homepage_url": "https://betterroblox.com",
+   "host_permissions": [ "*://*.roblox.com/*", "*://*.rbxcdn.com/*", "https://betterroblox.com/*", "https://*.betterroblox.com/*" ],
+   "icons": {
+      "128": "icons/icon128.png",
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2NrIQJp2jLuwBuM6uabWWlsXj4Kkln4K4Oh3Bww6Z+YBRxWfVo6ao0m7YWV9RY8TrWab9mXnA+XSJpJL79bl9FIrLjZVNL+EMGC0jgTYUlbK43bsLcnynH/N8m8AxmUk+1X8aXi1V19FKDCV6825cfi7WzNwO1H+a2SXYsUshAibFjUMWTD4Ag236iRelWdGhrWcabcZyp+7BFQiNA0czwN3Kp3uwzjyWaVOGljsVvMDAYqyw54mIj9D0hEA9TUcPHZYeHciz6i6k+u0N0XouzB0D0HH7hCIRYXRRG7jNPkN9rrEIljiTNFf4HrlMS5L7TGBQPLMU4lookqV9zz0ewIDAQAB",
+   "manifest_version": 3,
+   "name": "BetterBLOX - Better Roblox Extension",
+   "options_ui": {
+      "open_in_tab": true,
+      "page": "options.html"
+   },
+   "permissions": [ "storage", "unlimitedStorage", "notifications", "declarativeNetRequest", "tabs", "cookies", "alarms", "background" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.7.3",
+   "web_accessible_resources": [ {
+      "matches": [ "*://*/*" ],
+      "resources": [ "icons/svg/*.svg", "icons/png/*.png", "changelog.json", "styles/tailwind.css", "options.html" ]
+   } ]
+}

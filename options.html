@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BetterBLOX Settings</title>
+    <style>
+      :root {
+        --bg-top: #f4f8fb;
+        --bg-mid: #e7f1f6;
+        --bg-bot: #eef5f9;
+        --panel: rgba(255, 255, 255, 0.72);
+        --panel-border: rgba(56, 182, 201, 0.15);
+        --text: #13202b;
+        --text-muted: #5b6b78;
+        --accent: #3b82f6;
+        --accent-2: #38b6c9;
+        --toggle-off: #cbd5e1;
+        --row-border: rgba(56, 182, 201, 0.12);
+        --sidebar-active: rgba(59, 130, 246, 0.14);
+        --shadow: 0 2px 10px rgba(59, 130, 246, 0.06);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-top: #13202b;
+          --bg-mid: #181f28;
+          --bg-bot: #101317;
+          --panel: rgba(27, 30, 36, 0.55);
+          --panel-border: rgba(127, 180, 194, 0.16);
+          --text: #dbe7ee;
+          --text-muted: #93a4b1;
+          --accent: #60aae6;
+          --accent-2: #7fb4c2;
+          --toggle-off: #3a444f;
+          --row-border: rgba(127, 180, 194, 0.14);
+          --sidebar-active: rgba(127, 180, 194, 0.18);
+          --shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+      }
+
+      body {
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--text);
+        background: linear-gradient(
+          180deg,
+          var(--bg-top) 0%,
+          var(--bg-mid) 40%,
+          var(--bg-bot) 100%
+        );
+        background-attachment: fixed;
+      }
+
+      .shell {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 28px 20px 60px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 22px;
+      }
+
+      .topbar img {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+      }
+
+      .topbar h1 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+
+      .version-badge {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #fff;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 22px;
+        align-items: start;
+      }
+
+      @media (max-width: 680px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 14px;
+        padding: 8px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(8px);
+      }
+
+      @media (max-width: 680px) {
+        .sidebar {
+          position: static;
+          flex-direction: row;
+          overflow-x: auto;
+        }
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        text-align: left;
+        white-space: nowrap;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .nav-item:hover {
+        background: var(--sidebar-active);
+        color: var(--text);
+      }
+
+      .nav-item.active {
+        background: var(--sidebar-active);
+        color: var(--accent);
+      }
+
+      .content {
+        min-width: 0;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(8px);
+        overflow: hidden;
+      }
+
+      .panel-head {
+        padding: 18px 20px 6px;
+      }
+
+      .panel-head h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+
+      .panel-head p {
+        margin: 4px 0 0;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      .setting-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 20px;
+        border-top: 1px solid var(--row-border);
+      }
+
+      .setting-row:first-of-type {
+        border-top: 1px solid var(--row-border);
+      }
+
+      .setting-text {
+        min-width: 0;
+      }
+
+      .setting-text .title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .setting-text .desc {
+        margin-top: 4px;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        line-height: 1.4;
+      }
+
+      .beta-tag {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #b45309;
+        background: rgba(245, 158, 11, 0.16);
+        padding: 2px 7px;
+        border-radius: 10px;
+      }
+
+      .control {
+        flex-shrink: 0;
+        padding-top: 2px;
+      }
+
+      /* Toggle */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 46px;
+        height: 26px;
+        flex-shrink: 0;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        inset: 0;
+        cursor: pointer;
+        background: var(--toggle-off);
+        border-radius: 26px;
+        transition: background 0.2s;
+      }
+      .slider::before {
+        content: "";
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+      }
+      .switch input:checked + .slider {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      .switch input:checked + .slider::before {
+        transform: translateX(20px);
+      }
+      .switch input:focus-visible + .slider {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      /* Select + input */
+      .field {
+        min-width: 180px;
+        padding: 8px 12px;
+        border: 1px solid var(--panel-border);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--text);
+        font-size: 0.9rem;
+        font-family: inherit;
+      }
+      .field:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+      }
+
+      .info-card {
+        padding: 16px 20px;
+        font-size: 0.9rem;
+        line-height: 1.55;
+      }
+      .info-card a {
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .info-card a:hover {
+        text-decoration: underline;
+      }
+      .info-card ul {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
+      .callout {
+        border-left: 4px solid var(--accent-2);
+        background: rgba(56, 182, 201, 0.08);
+        padding: 12px 14px;
+        border-radius: 8px;
+        margin: 12px 0;
+      }
+      .callout.warn {
+        border-left-color: #f59e0b;
+        background: rgba(245, 158, 11, 0.1);
+      }
+
+      .reload-note {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      .toast {
+        position: fixed;
+        right: 22px;
+        bottom: 22px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #fff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 10px 16px;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.2s, transform 0.2s;
+        pointer-events: none;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .footer {
+        margin-top: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .btn {
+        font-family: inherit;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: 9px;
+        border: 1px solid var(--panel-border);
+        background: var(--panel);
+        color: var(--text);
+        cursor: pointer;
+        transition: background 0.15s, transform 0.1s;
+      }
+      .btn:hover {
+        background: var(--sidebar-active);
+      }
+      .btn:active {
+        transform: translateY(1px);
+      }
+    </style>
+    <link rel="stylesheet" href="styles/tailwind.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <img src="icons/icon128.png" alt="BetterBLOX logo" />
+        <h1>BetterBLOX Settings</h1>
+        <span class="version-badge" id="version-badge"></span>
+      </div>
+
+      <div class="layout">
+        <nav class="sidebar" id="sidebar" aria-label="Settings sections"></nav>
+        <main class="content" id="content"></main>
+      </div>
+
+      <div class="footer">
+        <span id="footer-note">Changes are saved automatically.</span>
+        <button class="btn" id="reset-btn">Reset all to defaults</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">Saved</div>
+
+    <script src="options.js"></script>
+  </body>
+</html>
